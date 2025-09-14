@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Stylized-AI Design System - Premium AI Fashion Tech */
+
+@layer base {
+  :root {
+    /* Core Background & Text */
+    --background: 0 0% 100%;
+    --foreground: 224 15% 10%;
+
+    /* Card System */
+    --card: 0 0% 100%;
+    --card-foreground: 224 15% 10%;
+
+    /* Popover System */
+    --popover: 0 0% 100%;
+    --popover-foreground: 224 15% 10%;
+
+    /* Primary Brand - Deep Tech Purple */
+    --primary: 262 73% 23%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 262 83% 58%;
+
+    /* Secondary - Elegant Rose */
+    --secondary: 330 25% 95%;
+    --secondary-foreground: 262 73% 23%;
+
+    /* Muted Tones */
+    --muted: 220 13% 96%;
+    --muted-foreground: 224 15% 45%;
+
+    /* Accent - Vibrant Tech */
+    --accent: 262 83% 58%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders & Inputs */
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+
+    /* Design System Enhancements */
+    --radius: 0.75rem;
+    
+    /* Premium Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(262 73% 23%), hsl(330 71% 41%));
+    --gradient-card: linear-gradient(135deg, hsl(262 83% 58% / 0.1), hsl(330 71% 41% / 0.1));
+    --gradient-accent: linear-gradient(135deg, hsl(262 83% 58%), hsl(330 71% 41%));
+    
+    /* Glass Effects */
+    --glass-bg: hsl(0 0% 100% / 0.8);
+    --glass-border: hsl(262 83% 58% / 0.15);
+    
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(262 83% 58% / 0.15);
+    --shadow-card: 0 10px 30px -5px hsl(262 20% 20% / 0.1);
+    --shadow-button: 0 4px 20px hsl(262 83% 58% / 0.25);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    }
+
+    /* Dark mode adjustments */
+    .dark {
+      --background: 224 15% 8%;
+      --foreground: 210 40% 98%;
+
+      --card: 224 15% 8%;
+      --card-foreground: 210 40% 98%;
+
+      --popover: 224 15% 8%;
+      --popover-foreground: 210 40% 98%;
+
+      --primary: 262 83% 58%;
+      --primary-foreground: 224 15% 10%;
+      --primary-glow: 262 83% 70%;
+
+      --secondary: 224 15% 15%;
+      --secondary-foreground: 210 40% 98%;
+
+      --muted: 224 15% 15%;
+      --muted-foreground: 215 20.2% 65.1%;
+
+      --accent: 262 83% 58%;
+      --accent-foreground: 210 40% 98%;
+
+      --destructive: 0 62.8% 50%;
+      --destructive-foreground: 210 40% 98%;
+
+      --border: 224 15% 20%;
+      --input: 224 15% 20%;
+      --ring: 262 83% 58%;
+
+      /* Dark mode glass effects */
+      --glass-bg: hsl(224 15% 8% / 0.8);
+      --glass-border: hsl(262 83% 58% / 0.2);
+    }
+  }
+
+  @layer base {
+    * {
+      @apply border-border;
+    }
+
+    body {
+      @apply bg-background text-foreground;
+      font-feature-settings: "rlig" 1, "calt" 1;
+    }
+
+    /* Custom background pattern */
+    .bg-grid-pattern {
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+  }
