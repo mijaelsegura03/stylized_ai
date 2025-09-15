@@ -9,9 +9,66 @@ import { Sparkles, Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
+
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+    if (!termsAccepted) {
+      setError("You must accept the terms.");
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch("http://localhost:8000/api/register/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password
+        })
+      });
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data?.detail || "Registration failed.");
+      } else {
+        setSuccess("Account created successfully!");
+      }
+    } catch (err) {
+      setError("Network error. Try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
@@ -34,20 +91,39 @@ const Register = () => {
             </CardHeader>
             
             <CardContent className="space-y-6">
-              <form className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Full Name</Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="name"
-                      type="text"
-                      placeholder="Enter your full name"
-                      className="pl-10 bg-glass-bg border-glass-border"
-                    />
+              <form className="space-y-4" onSubmit={handleSubmit}>
+                <div className="flex space-x-2">
+                  <div className="space-y-2 w-1/2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="firstName"
+                        type="text"
+                        placeholder="First name"
+                        className="pl-10 bg-glass-bg border-glass-border"
+                        value={firstName}
+                        onChange={e => setFirstName(e.target.value)}
+                        autoComplete="given-name"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2 w-1/2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="lastName"
+                        type="text"
+                        placeholder="Last name"
+                        className="pl-10 bg-glass-bg border-glass-border"
+                        value={lastName}
+                        onChange={e => setLastName(e.target.value)}
+                        autoComplete="family-name"
+                      />
+                    </div>
                   </div>
                 </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="email">Email Address</Label>
                   <div className="relative">
@@ -57,10 +133,12 @@ const Register = () => {
                       type="email"
                       placeholder="Enter your email"
                       className="pl-10 bg-glass-bg border-glass-border"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      autoComplete="email"
                     />
                   </div>
                 </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <div className="relative">
@@ -70,6 +148,9 @@ const Register = () => {
                       type={showPassword ? "text" : "password"}
                       placeholder="Create a password"
                       className="pl-10 pr-10 bg-glass-bg border-glass-border"
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      autoComplete="new-password"
                     />
                     <button
                       type="button"
@@ -80,7 +161,6 @@ const Register = () => {
                     </button>
                   </div>
                 </div>
-                
                 <div className="space-y-2">
                   <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <div className="relative">
@@ -90,6 +170,9 @@ const Register = () => {
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirm your password"
                       className="pl-10 pr-10 bg-glass-bg border-glass-border"
+                      value={confirmPassword}
+                      onChange={e => setConfirmPassword(e.target.value)}
+                      autoComplete="new-password"
                     />
                     <button
                       type="button"
@@ -100,9 +183,8 @@ const Register = () => {
                     </button>
                   </div>
                 </div>
-                
                 <div className="flex items-start space-x-2">
-                  <Checkbox id="terms" className="mt-1" />
+                  <Checkbox id="terms" className="mt-1" checked={termsAccepted} onCheckedChange={v => setTermsAccepted(!!v)} />
                   <div className="text-sm">
                     <label htmlFor="terms" className="text-muted-foreground cursor-pointer">
                       I agree to the{" "}
@@ -116,9 +198,10 @@ const Register = () => {
                     </label>
                   </div>
                 </div>
-                
-                <Button variant="gradient" size="lg" className="w-full">
-                  Create Account
+                {error && <div className="text-red-500 text-sm">{error}</div>}
+                {success && <div className="text-green-600 text-sm">{success}</div>}
+                <Button variant="gradient" size="lg" className="w-full" type="submit" disabled={loading}>
+                  {loading ? "Creating..." : "Create Account"}
                 </Button>
               </form>
               
