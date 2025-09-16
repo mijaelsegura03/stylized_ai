@@ -9,15 +9,12 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-from dotenv import load_dotenv
 import os
-load_dotenv()
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
+ENVIRONMENT = os.environ.get('ENVIRONMENT')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
@@ -25,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('DJANGO-SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO-DEBUG')
+DEBUG = ENVIRONMENT == 'development'
 
 ALLOWED_HOSTS = []
 
@@ -39,8 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     'projects',
-    'rest_framework'
+    'rest_framework',
+    'admin_honeypot'
 ]
 
 MIDDLEWARE = [
@@ -51,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = 'stylizedai.urls'
@@ -68,6 +71,13 @@ TEMPLATES = [
             ],
         },
     },
+]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend'
 ]
 
 WSGI_APPLICATION = 'stylizedai.wsgi.application'
@@ -145,3 +155,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+
+ACCOUNT_USERNAME_BLACKLIST = ['admin', 'user', 'test', 'administrator', 'root', 'superuser', 'staff', 'null', 'none', 'undefined', 'api', 'support', 'contact', 'help', 'info', 'sales', 'marketing', 'security', 'sysadmin', 'webmaster', 'hostmaster', 'postmaster', 'tobyteamo', 'accounts', 'profile']
