@@ -22,9 +22,9 @@ ENVIRONMENT = os.environ.get('ENVIRONMENT')
 SECRET_KEY = os.environ.get('DJANGO-SECRET')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = ENVIRONMENT == 'development'
+DEBUG = True#ENVIRONMENT == 'development'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -136,11 +136,11 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-if os.environ.get('ENVIRONMENT') == 'production':
+if ENVIRONMENT == 'production':
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.gmail.net'
+    EMAIL_HOST = 'smtp.gmail.com'
     EMAIL_HOST_USER = os.environ.get('EMAIL_ADDRESS')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
     EMAIL_PORT = 587
     EMAIL_USE_TLS = True
     DEFAULT_FROM_EMAIL = 'StylizedAI'
@@ -157,3 +157,4 @@ REST_FRAMEWORK = {
 }
 
 ACCOUNT_USERNAME_BLACKLIST = ['admin', 'user', 'test', 'administrator', 'root', 'superuser', 'staff', 'null', 'none', 'undefined', 'api', 'support', 'contact', 'help', 'info', 'sales', 'marketing', 'security', 'sysadmin', 'webmaster', 'hostmaster', 'postmaster', 'tobyteamo', 'accounts', 'profile']
+AUTH_USER_MODEL = 'projects.CustomUserModel'

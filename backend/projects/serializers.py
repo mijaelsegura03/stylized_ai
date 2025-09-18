@@ -1,12 +1,17 @@
 from rest_framework import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 # Serializers define the API representation.
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('url','username', 'email', 'first_name', 'last_name', 'password', 'date_joined')
-        read_only_fields = ('url','date_joined')
+        fields = ('id', 'email', 'first_name', 'last_name', 'birth_date', 'password', 'date_joined')
+        read_only_fields = ('id', 'date_joined')
+        extra_kwargs = {
+            'first_name': {'required': True, 'allow_blank': False},
+            'last_name': {'required': True, 'allow_blank': False}
+        }
     
     def create(self, validated_data):
         """
